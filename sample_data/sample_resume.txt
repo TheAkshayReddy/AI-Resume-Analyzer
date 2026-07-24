@@ -1,0 +1,29 @@
+Hemanth Pai
+
+Associate Data Scientist
+
+Skills:
+Python
+FastAPI
+Machine Learning
+Generative AI
+RAG
+LangChain
+Git
+SQL
+
+Projects:
+AI Resume Analyzer
+Voice AI Agent
+Loan Default Prediction
+
+Education:
+B.Tech in Computer Science and Engineering (Data Science)
+
+Experience:
+Associate Data Scientist at Seanergy.ai
+
+Strengths:
+Problem Solving
+AI Development
+Python Programming
