@@ -1,13 +1,7 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, UploadFile, File, Form
 from app.resume_analyzer import analyze_resume
 
 app = FastAPI()
-
-
-class AnalyzeRequest(BaseModel):
-    resume_path: str
-    job_description: str
 
 
 @app.get("/")
@@ -18,11 +12,13 @@ def home():
 
 
 @app.post("/analyze")
-def analyze(request: AnalyzeRequest):
-
-    result = analyze_resume(
-        request.resume_path,
-        request.job_description
+async def analyze(
+    resume: UploadFile = File(...),
+    job_description: str = Form(...)
+):
+    result = await analyze_resume(
+        resume,
+        job_description
     )
 
     return result
