@@ -137,7 +137,6 @@ def display_list(title, items):
     for item in items:
         st.markdown(f"- {item}")
 
-
 def call_api(uploaded_file, job_description):
 
     files = {
@@ -155,8 +154,11 @@ def call_api(uploaded_file, job_description):
     response = requests.post(
         API_URL,
         files=files,
-        data=data
+        data=data,
+        timeout=60
     )
+
+    return response
 
 # -----------------------------
 # Analyze Button Logic
