@@ -442,27 +442,18 @@ if analyze_button:
             st.warning(
                 "Average match. Consider updating your resume before applying."
             )
+
 st.markdown("---")
+st.markdown("### Developed by Akshay Reddy Chenreddi")
 
-st.markdown(
-    """
-    <div style="text-align:center; padding:20px;">
-        <h4>Developed by Akshay Reddy Chenreddi</h4>
-
-        <p>
-            🔗 <a href="https://www.linkedin.com/in/akshay-reddy07/" target="_blank">
-                LinkedIn
-            </a>
-            &nbsp; | &nbsp;
-            💻 <a href="https://github.com/TheAkshayReddy" target="_blank">
-                GitHub
-            </a>
-        </p>
-
-        <p style="color:gray; font-size:14px;">
-            Built with ❤️ using Streamlit, FastAPI, Google Gemini & PyPDF
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
+st.link_button(
+    "🔗 LinkedIn",
+    "https://www.linkedin.com/in/akshay-reddy07/"
 )
+
+st.link_button(
+    "💻 GitHub",
+    "https://github.com/TheAkshayReddy"
+)
+
+st.caption("Built with ❤️ using Streamlit, FastAPI, Google Gemini & PyPDF")
