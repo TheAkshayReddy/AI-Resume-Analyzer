@@ -1,9 +1,11 @@
 import os
 import json
+import time
 import logging
 
 from dotenv import load_dotenv
 from google import genai
+from google.genai.errors import ServerError
 
 from app.prompt_builder import build_prompt
 
@@ -25,11 +27,26 @@ async def analyze_resume(resume, job_description):
 
     logger.info("Calling Gemini API")
 
-    response = client.models.generate_content(
-        model="gemini-3.6-flash",
-        contents=prompt
-    )
+    retries = 3
 
-    logger.info("Analysis completed successfully")
+    for attempt in range(retries):
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.6-flash",
+                contents=prompt
+            )
 
-    return json.loads(response.text)
+            logger.info("Analysis completed successfully")
+
+            return json.loads(response.text)
+
+        except ServerError as e:
+
+            logger.warning(
+                f"Gemini busy. Retry {attempt + 1}/{retries}"
+            )
+
+            if attempt == retries - 1:
+                raise e
+
+            time.sleep(2)

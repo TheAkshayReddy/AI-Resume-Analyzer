@@ -158,8 +158,6 @@ def call_api(uploaded_file, job_description):
         data=data
     )
 
-    return response
-
 # -----------------------------
 # Analyze Button Logic
 # -----------------------------
@@ -183,17 +181,31 @@ if analyze_button:
                 job_description,
             )
 
-            if response.status_code != 200:
+            if response.status_code == 503:
+
+                st.warning(
+                    """
+⚠️ **Google Gemini is currently experiencing high demand.**
+
+Please wait 20–30 seconds and try again.
+
+This is a temporary issue with the AI service, not your resume.
+"""
+                )
+                st.stop()
+
+            elif response.status_code != 200:
 
                 try:
                     error_message = response.json().get(
                         "detail",
                         "Unknown error occurred."
                     )
+
                 except Exception:
                     error_message = response.text
 
-                st.error(f"API Error: {error_message}")
+                st.error(error_message)
                 st.stop()
 
             result = response.json()

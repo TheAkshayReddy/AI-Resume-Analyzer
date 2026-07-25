@@ -1,6 +1,8 @@
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
-from app.logger import logger
 
+from google.genai.errors import ServerError
+
+from app.logger import logger
 from app.resume_analyzer import analyze_resume
 from app.models.response_models import ResumeAnalysisResponse
 
@@ -25,18 +27,36 @@ async def analyze(
     logger.info(f"Received file: {resume.filename}")
 
     if not resume.filename.lower().endswith(".pdf"):
-        logger.warning("Invalid file type uploaded")
-
         raise HTTPException(
             status_code=400,
             detail="Only PDF files are allowed."
         )
 
-    result = await analyze_resume(
-        resume,
-        job_description
-    )
+    try:
 
-    logger.info("Returning response")
+        result = await analyze_resume(
+            resume,
+            job_description
+        )
 
-    return result
+        logger.info("Returning response")
+
+        return result
+
+    except ServerError:
+
+        logger.error("Gemini service unavailable")
+
+        raise HTTPException(
+            status_code=503,
+            detail="AI service is temporarily busy. Please try again in a few moments."
+        )
+
+    except Exception as e:
+
+        logger.exception(e)
+
+        raise HTTPException(
+            status_code=500,
+            detail="Unexpected server error. Please try again later."
+        )
